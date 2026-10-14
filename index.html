@@ -1,21 +1,29 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
 <title>🔒 TERKUNCI</title>
 <style>
-* {margin: 0; padding: 0; box-sizing: border-box; user-select: none;}
-body {
+* {margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none;}
+html, body {
   background: radial-gradient(circle at center, #1a0000 0%, #000000 70%);
   min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
   font-family: 'Courier New', monospace;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #ff0000;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 .box {
@@ -108,23 +116,27 @@ const PASSWORD = "@bnzzzz";
 const musik = document.getElementById('musik');
 const kotak = document.getElementById('kotak');
 
-// SAAT HALAMAN DIBUKA
+// LAYAR PENUH
+function masukLayarPenuh() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
+  else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+}
+document.addEventListener('touchstart', masukLayarPenuh, { once: true });
+document.addEventListener('click', masukLayarPenuh, { once: true });
+
+// GETAR + SUARA SAAT DIBUKA
 window.addEventListener('load', () => {
-  // HP BERGETAR
-  if (navigator.vibrate) {
-    navigator.vibrate([200, 100, 200, 100, 400]);
-  }
-  // COBA MULAI SUARA
+  if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
   const mulaiAudio = () => {
     musik.volume = 0.5;
     musik.play().catch(() => {});
-    document.removeEventListener('click', mulaiAudio);
-    document.removeEventListener('touchstart', mulaiAudio);
   };
-  document.addEventListener('click', mulaiAudio);
-  document.addEventListener('touchstart', mulaiAudio);
+  document.addEventListener('touchstart', mulaiAudio, { once: true });
+  document.addEventListener('click', mulaiAudio, { once: true });
 });
 
+// CEK KATA SANDI
 function cek() {
   const input = document.getElementById('pass').value;
   const salah = document.getElementById('salah');
@@ -141,39 +153,63 @@ function cek() {
         <p style="color:#444;font-size:10px;margin-top:40px;">by @bnzzzz</p>
       </div>
     `;
+    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
   } else {
     salah.style.display = 'block';
-    // GETAR TEKS
     kotak.classList.remove('getar-anim');
     void kotak.offsetWidth;
     kotak.classList.add('getar-anim');
-    // HP BERGETAR
-    if (navigator.vibrate) {
-      navigator.vibrate([300, 150, 300, 150, 600]);
-    }
+    if (navigator.vibrate) navigator.vibrate([300, 150, 300, 150, 600]);
     document.getElementById('pass').value = '';
   }
 }
 
-// BLOKIR TOMBOL KEMBALI
-history.pushState({page: 1}, '', location.href);
-history.pushState({page: 2}, '', location.href);
-window.onpopstate = () => { history.go(1); return false; };
+// BLOKIR TOMBOL KEMBALI DI BROWSER
+history.pushState({ locked: true }, '', location.href);
+history.pushState({ locked: true }, '', location.href);
+history.pushState({ locked: true }, '', location.href);
+
+window.addEventListener('popstate', () => {
+  history.pushState({ locked: true }, '', location.href);
+  history.go(1);
+});
+
+setInterval(() => {
+  if (window.history.state && window.history.state.locked !== true) {
+    history.pushState({ locked: true }, '', location.href);
+  }
+}, 100);
+
+// PERINGATAN SAAT MAU TUTUP TAB
+window.addEventListener('beforeunload', e => {
+  e.preventDefault();
+  e.returnValue = '⚠️ Masih terkunci! Yakin mau keluar?';
+  return e.returnValue;
+});
 
 // BLOKIR TOMBOL PINTAS
 document.addEventListener('keydown', e => {
-  const dilarang = ['Escape','F11','F5','F12','AltLeft','AltRight','ControlLeft','ControlRight','w','W','t','T','n','N','r','R','Backspace'];
-  if (dilarang.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey) {
+  const dilarang = [
+    'Escape','F11','F5','F12','AltLeft','AltRight','ControlLeft','ControlRight',
+    'w','W','t','T','n','N','r','R','Backspace','Home','End','PageUp','PageDown'
+  ];
+  if (dilarang.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey || e.keyCode === 91) {
     e.preventDefault();
     e.stopPropagation();
+    e.stopImmediatePropagation();
     return false;
   }
 }, true);
 
+// BLOKIR KLIK KANAN & TEKAN LAMA
 document.addEventListener('contextmenu', e => e.preventDefault());
-window.onbeforeunload = () => '⚠️ Masih terkunci!';
+document.addEventListener('mousedown', e => e.preventDefault());
+document.addEventListener('touchstart', e => {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
 
-// FOKUS KE INPUT
+// FOKUS TERUS KE INPUT
 setInterval(() => {
   const input = document.getElementById('pass');
   if (input && document.activeElement !== input) input.focus();
