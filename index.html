@@ -1,48 +1,125 @@
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', monospace;}
 body {
-    background: #000000;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: #ff0000;
-    text-align: center;
-    padding: 20px;
+  background: #0a0a0a;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff3333;
+  padding: 20px;
 }
-.container {
-    background: #111111;
-    padding: 40px 30px;
-    border-radius: 20px;
-    border: 1px solid #ff0000;
-    max-width: 450px;
-    width: 100%;
+.box {
+  background: #151515;
+  border: 2px solid #ff3333;
+  border-radius: 12px;
+  padding: 40px 30px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.25);
 }
-h1 { font-size: 28px; margin-bottom: 15px; color: #ff0000; }
-p { font-size: 16px; margin-bottom: 25px; line-height: 1.6; color: #ff0000; }
-.timer { font-size: 48px; font-weight: bold; color: #ff0000; margin: 20px 0; letter-spacing: 3px; }
-.input-box { margin: 20px 0; }
-input {
-    padding: 12px;
-    font-size: 18px;
-    width: 180px;
-    text-align: center;
-    border: 1px solid #ff0000;
-    border-radius: 8px;
-    outline: none;
-    background: #000000;
-    color: #ff0000;
+h2 {
+  text-align: center;
+  color: #ff3333;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
-button {
-    padding: 12px 30px;
-    font-size: 16px;
-    background: #ff0000;
-    color: #000000;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: 0.3s;
+.msg {
+  background: #222;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 25px;
+  line-height: 1.7;
+  font-size: 14px;
+  color: #ff6666;
+  text-align: center;
 }
-button:hover { background: #cc0000; }
-.success { color: #ff0000; margin-top: 20px; font-size: 18px; display: none; }
+.input-kunci {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  text-align: center;
+  background: #000;
+  border: 1px solid #ff3333;
+  color: #fff;
+  border-radius: 6px;
+  outline: none;
+  letter-spacing: 4px;
+}
+.tombol {
+  width: 100%;
+  padding: 14px;
+  margin-top: 18px;
+  background: #ff3333;
+  color: #000;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.tombol:hover {background: #cc0000;}
+.hasil {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 15px;
+  display: none;
+}
+.benar {color: #00ff66;}
+.salah {color: #ff6666;}
+.credit {
+  margin-top: 25px;
+  font-size: 11px;
+  text-align: center;
+  color: #666;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>🔒 JANGAN MAIN JUDI BEGO</h2>
+  
+  <div class="msg">
+    Masukkan kunci untuk melanjutkan
+  </div>
+
+  <input type="text" id="kunci" class="input-kunci" placeholder="Masukkan kunci...">
+  
+  <button class="tombol" onclick="cekKunci()">Buka</button>
+  
+  <div id="hasil-benar" class="hasil benar">✅ Kunci Benar! Tetap semangat, jangan nyerah!</div>
+  <div id="hasil-salah" class="hasil salah">❌ Kunci salah, coba lagi</div>
+
+  <div class="credit">
+    by: @bnzzz22
+  </div>
+</div>
+
+<script>
+const KUNCI_BENAR = "676767";
+
+function cekKunci() {
+  const input = document.getElementById('kunci').value;
+  const benar = document.getElementById('hasil-benar');
+  const salah = document.getElementById('hasil-salah');
+  
+  benar.style.display = 'none';
+  salah.style.display = 'none';
+  
+  if (input === KUNCI_BENAR) {
+    benar.style.display = 'block';
+  } else {
+    salah.style.display = 'block';
+  }
+}
+</script>
+
+</body>
+</html>
+
