@@ -2,11 +2,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
-<title>🔒 TERKUNCI</title>
+<title>💰 UANG GRATIS!</title>
 <style>
 * {margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none;}
 html, body {
@@ -23,19 +22,25 @@ html, body {
   inset: 0;
   width: 100%;
   height: 100%;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: 20px;
 }
 
 .box {
   background: #111;
   border: 3px solid #ff0000;
   border-radius: 12px;
-  padding: 40px 30px;
-  max-width: 380px;
-  width: 90%;
+  padding: 35px 25px;
+  max-width: 360px;
+  width: 100%;
   text-align: center;
   box-shadow: 0 0 40px rgba(255, 0, 0, 0.4);
+  transition: all 0.3s ease;
 }
+.box.merah {
+  background: #ff0000;
+  border-color: #ff3333;
+}
+
 @keyframes getar {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-8px); }
@@ -44,20 +49,83 @@ html, body {
 .getar-anim {
   animation: getar 0.3s ease-in-out;
 }
+
 .box h2 {
-  color: #ff0000;
+  color: #ffcc00;
   font-size: 22px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px #ff0000;
+  text-shadow: 0 0 10px #ffcc00;
 }
+.box.merah h2 {
+  color: #000;
+  text-shadow: none;
+}
+
+.instruksi-awal {
+  color: #ffcc00;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 204, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid #ffcc00;
+}
+.box.merah .instruksi-awal {
+  display: none;
+}
+
+.instruksi-keluar {
+  display: none;
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  border: 2px solid #000;
+}
+.box.merah .instruksi-keluar {
+  display: block;
+}
+
+.btn-masuk {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #ff3300, #ff6600);
+  color: #000;
+  border: none;
+  font-size: 17px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(255, 51, 0, 0.3);
+  transition: all 0.3s;
+}
+.btn-masuk:active { 
+  background: #cc2200;
+  transform: scale(0.98);
+}
+.box.merah .btn-masuk {
+  display: none;
+}
+
 .box p {
   color: #ccc;
   font-size: 14px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   line-height: 1.6;
 }
+.box.merah p {
+  color: #222;
+  font-weight: 600;
+}
+
 .box input {
   width: 100%;
   padding: 14px;
@@ -68,12 +136,20 @@ html, body {
   color: #fff;
   border-radius: 6px;
   outline: none;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+  transition: all 0.3s;
 }
-.box button {
+.box.merah input {
+  background: #fff;
+  border-color: #000;
+  color: #000;
+  font-weight: bold;
+}
+
+.box button[type="button"] {
   width: 100%;
   padding: 14px;
-  margin-top: 15px;
   background: #ff0000;
   color: #000;
   border: none;
@@ -81,76 +157,94 @@ html, body {
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 0.3s;
 }
-.box button:active {background: #cc0000;}
+.box.merah button[type="button"] {
+  background: #000;
+  color: #fff;
+}
+.box button[type="button"]:active { background: #cc0000; }
+.box.merah button[type="button"]:active { background: #333; }
+
 .salah {
   color: #ff6666;
   font-size: 13px;
   margin-top: 12px;
   display: none;
 }
+.box.merah .salah {
+  color: #330000;
+  font-weight: bold;
+}
+
 .credit {
   color: #333;
-  font-size: 11px;
-  margin-top: 25px;
+  font-size: 10px;
+  margin-top: 15px;
+}
+.box.merah .credit {
+  color: #660000;
 }
 </style>
 </head>
 <body>
 
-<audio id="musik" loop>
-  <source src="https://www.soundjay.com/ambient/sounds/horror-ambient-01.mp3" type="audio/mpeg">
-
-
 <div class="box getar-anim" id="kotak">
-  <h2>🔒 TERKUNCI!</h2>
-  <p>Halaman ini telah dikunci.<br>Masukkan kata sandi untuk membukanya.</p>
-  <input type="text" id="pass" placeholder="Masukkan kata sandi...">
-  <button onclick="cek()">KIRIM</button>
-  <div class="salah" id="salah">❌ Kata sandi salah! Coba lagi</div>
+  <h2>💰 UANG GRATIS!</h2>
+  
+  <div class="instruksi-awal" id="instruksiAwal">
+    👇 Cara mendapatkan uang secara gratis di sini 👇
+  </div>
+  
+  <div class="instruksi-keluar" id="instruksiKeluar">
+    ⚠️ HAH! Mau uang gratis? 😂<br>
+    Masukkan kata sandi untuk keluar dari sini
+  </div>
+  
+  <button class="btn-masuk" id="btnLayarPenuh" onclick="masukLayarPenuh()">
+    💵 KLIK DI SINI AMBIL UANGNYA
+  </button>
+  
+  <p>Masukkan kata sandi untuk melanjutkan:</p>
+  
+  <input type="text" id="pass" placeholder="Masukkan sandi...">
+  <button type="button" onclick="cek()">KIRIM</button>
+  
+  <div class="salah" id="salah">❌ Salah! Jangan serakah ya, coba lagi 😜</div>
+  
   <div class="credit">by @bnzzzz</div>
 </div>
 
 <script>
-const PASSWORD = "@bnzzzz";
-const musik = document.getElementById('musik');
+const PASSWORD = "jangan345";
 const kotak = document.getElementById('kotak');
 
-// LAYAR PENUH
 function masukLayarPenuh() {
   const elem = document.documentElement;
-  if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
-  else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+  kotak.classList.add('merah');
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  }
 }
-document.addEventListener('touchstart', masukLayarPenuh, { once: true });
-document.addEventListener('click', masukLayarPenuh, { once: true });
 
-// GETAR + SUARA SAAT DIBUKA
 window.addEventListener('load', () => {
   if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
-  const mulaiAudio = () => {
-    musik.volume = 0.5;
-    musik.play().catch(() => {});
-  };
-  document.addEventListener('touchstart', mulaiAudio, { once: true });
-  document.addEventListener('click', mulaiAudio, { once: true });
 });
 
-// CEK KATA SANDI
 function cek() {
   const input = document.getElementById('pass').value;
   const salah = document.getElementById('salah');
   
   if (input === PASSWORD) {
-    musik.pause();
     if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
     document.body.style.background = 'linear-gradient(#0a0a0a, #111)';
     document.body.innerHTML = `
       <div style="text-align:center;color:#0f0;padding:40px;">
-        <h2>✅ TERBUKA!</h2>
-        <p style="color:#aaa;margin-top:15px;">Berhasil dibuka 😄</p>
-        <p style="color:#666;font-size:12px;margin-top:30px;">Boleh tutup halaman ini</p>
-        <p style="color:#444;font-size:10px;margin-top:40px;">by @bnzzzz</p>
+        <h2>😈 TERTIPU!</h2>
+        <p style="color:#aaa;margin-top:20px;font-size:16px;">Tidak ada uang yang benar-benar gratis di dunia ini, ingat itu ya!</p>
+        <p style="color:#444;font-size:11px;margin-top:30px;">by @bnzzzz</p>
       </div>
     `;
     if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
@@ -165,51 +259,30 @@ function cek() {
   }
 }
 
-// BLOKIR TOMBOL KEMBALI DI BROWSER
 history.pushState({ locked: true }, '', location.href);
 history.pushState({ locked: true }, '', location.href);
-history.pushState({ locked: true }, '', location.href);
-
 window.addEventListener('popstate', () => {
   history.pushState({ locked: true }, '', location.href);
   history.go(1);
 });
 
-setInterval(() => {
-  if (window.history.state && window.history.state.locked !== true) {
-    history.pushState({ locked: true }, '', location.href);
-  }
-}, 100);
-
-// PERINGATAN SAAT MAU TUTUP TAB
 window.addEventListener('beforeunload', e => {
   e.preventDefault();
   e.returnValue = '⚠️ Masih terkunci! Yakin mau keluar?';
   return e.returnValue;
 });
 
-// BLOKIR TOMBOL PINTAS
 document.addEventListener('keydown', e => {
-  const dilarang = [
-    'Escape','F11','F5','F12','AltLeft','AltRight','ControlLeft','ControlRight',
-    'w','W','t','T','n','N','r','R','Backspace','Home','End','PageUp','PageDown'
-  ];
-  if (dilarang.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey || e.keyCode === 91) {
+  const dilarang = ['Escape','F11','F5','F12','AltLeft','AltRight','ControlLeft','ControlRight','w','W','t','T','n','N','r','R','Backspace'];
+  if (dilarang.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey) {
     e.preventDefault();
     e.stopPropagation();
-    e.stopImmediatePropagation();
     return false;
   }
 }, true);
 
-// BLOKIR KLIK KANAN & TEKAN LAMA
 document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('mousedown', e => e.preventDefault());
-document.addEventListener('touchstart', e => {
-  if (e.touches.length > 1) e.preventDefault();
-}, { passive: false });
 
-// FOKUS TERUS KE INPUT
 setInterval(() => {
   const input = document.getElementById('pass');
   if (input && document.activeElement !== input) input.focus();
