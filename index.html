@@ -3,56 +3,127 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HP MU TELAH TERKUNCI</title>
+
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;min-height:100vh;display:grid;place-items:center;
-  background:#100000;color:white;font-family:Arial,sans-serif
+* {
+  box-sizing: border-box;
 }
-.panel{
-  width: min(88%,360px);padding:26px 22px;text-align:center;
-  background:#1b1111;border:2px solid #e00000;border-radius:16px;
-  box-shadow:0 0 24px #650000
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background: transparent;
+  font-family: Arial, sans-serif;
+  color: white;
 }
-h2{color:#ff2929;font-size:24px}
-input,button{
-  width:100%;padding:13px;margin-top:12px;border-radius:8px;
-  font-size:16px
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-input{background:#292020;color:white;border:1px solid #704040}
-button{background:#c90000;color:white;border:0;font-weight:bold}
-#status{font-size:13px;color:#ffaaaa;min-height:18px}
-footer{margin-top:24px;color:#999;font-size:12px}
+
+.panel {
+  width: min(88%, 340px);
+  padding: 24px 20px;
+  background: #1c1010;
+  border: 2px solid #ff2424;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 0 20px #7a0000;
+}
+
+h2 {
+  margin-top: 0;
+  color: #ff3030;
+  font-size: 22px;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #8c4444;
+  border-radius: 8px;
+  background: #2a2020;
+  color: white;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #d40000;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#status {
+  min-height: 18px;
+  color: #ffaaaa;
+}
+
+footer {
+  margin-top: 16px;
+  color: #aaa;
+  font-size: 12px;
+}
 </style>
 </head>
+
 <body>
-<main class="panel" id="panel">
-  <h2>HP MU TELAH TERKUNCI</h2>
-  <p>Masukkan kode untuk menutup panel ini.</p>
-  <input id="pin" type="password" inputmode="numeric"
-         placeholder="Masukkan PIN">
-  <button id="unlock">BUKA KUNCI</button>
-  <p id="status"></p>
-  <footer>by @bnzzz28</footer>
-</main>
+  <main class="panel" id="panel">
+    <h2>HP MU TELAH TERKUNCI</h2>
+    <p>Masukkan PIN untuk menutup panel ini.</p>
+
+    <form id="unlockForm">
+      <input
+        id="pin"
+        type="password"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="Masukkan PIN"
+        aria-label="Masukkan PIN"
+        required
+      >
+      <button type="submit">TUTUP PANEL</button>
+    </form>
+
+    <p id="status" role="status"></p>
+    <footer>by @bnzzz28</footer>
+  </main>
+
 <script>
 const PIN = "7891234";
 
-document.getElementById("unlock").onclick = () => {
-  const input = document.getElementById("pin");
-  const status = document.getElementById("status");
+document.getElementById("unlockForm")
+  .addEventListener("submit", function(event) {
+    event.preventDefault();
 
-  if (input.value === PIN) {
-    document.getElementById("panel").remove();
-    document.body.innerHTML =
-      "<h2 style='color:white'>Panel ditutup.</h2>";
-  } else {
-    status.textContent = "Kode salah. Coba lagi.";
-    input.value = "";
-  }
-};
+    const input = document.getElementById("pin");
+    const status = document.getElementById("status");
+
+    if (input.value === PIN) {
+      document.getElementById("panel").remove();
+    } else {
+      status.textContent = "PIN salah. Coba lagi.";
+      input.value = "";
+      input.focus();
+    }
+  });
 </script>
 </body>
 </html>
