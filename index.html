@@ -1,192 +1,137 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Mode Kiosk</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            margin: 0;
-            background: #fff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100000">
+<title>HP MU TELAH TERKUNCI</title>
+<style>
+* { box-sizing: border-box; }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #100000;
+  color: white;
+  font-family: Arial, sans-serif;
+}
 
-        /* Tombol tersembunyi di sudut kanan atas, tekan 5x untuk keluar */
-        .zona-kunci {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 60px;
-            height: 60px;
-            z-index: 10;
-            cursor: default;
-        }
+.panel {
+  width: 100%;
+  max-width: 380px;
+  padding: 25px 20px;
+  text-align: center;
+  background: #1b1111;
+  border: 2px solid #e00000;
+  border-radius: 15px;
+  box-shadow: 0 0 25px #650000;
+}
 
-        /* Layar kode */
-        .layar-kode {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            padding: 20px;
-        }
-        .kotak {
-            background: white;
-            border-radius: 16px;
-            padding: 30px 25px;
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-        }
-        .kotak h3 { margin-bottom: 15px; color: #1f2937; }
-        .input-baris {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .input-baris input {
-            width: 45px; height: 50px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 20px;
-            text-align: center;
-            outline: none;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 8px;
-        }
-        .batal { background: #e5e7eb; color: #333; }
-        .salah { color: #dc2626; font-size: 13px; margin-top: 8px; display: none; }
-        .info-petunjuk {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            font-size: 10px;
-            color: rgba(0,0,0,0.05);
-            z-index: 5;
-        }
-    </style>
+h1 { color: #ff2929; font-size: 25px; }
+.timer { color: #ff3939; font-size: 38px; font-weight: bold; }
+
+input, button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+input {
+  background: #292020;
+  color: white;
+  border: 1px solid #704040;
+}
+
+button {
+  background: #c90000;
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+
+#status { color: #ffaaaa; font-size: 13px; }
+.footer { margin-top: 25px; color: #999; font-size: 12px; }
+.note { color: #bbb; font-size: 11px; }
+</style>
 </head>
+
 <body>
+<main class="panel" id="panel">
+  <h1>HP MU TELAH TERKUNCI</h1>
+  <p>SIMULASI LAYAR PENGUNCI</p>
 
-    <!-- Website langsung tampil -->
-    <iframe id="web" src="https://www.google.com"></iframe>
+  <div class="timer" id="timer">02:00</div>
 
-    <!-- Zona tersembunyi: tekan 5x di pojok kanan atas untuk keluar -->
-    <div class="zona-kunci" id="zonaKeluar" onclick="tekanKeluar()"></div>
+  <input id="pin" type="password"
+         inputmode="numeric" placeholder="Masukkan PIN">
 
-    <!-- Layar kode keluar -->
-    <div class="layar-kode" id="layarKode">
-        <div class="kotak">
-            <h3>🔒 Masukkan Kode</h3>
-            <div class="input-baris">
-                <input type="password" maxlength="1" id="k1" oninput="lanjut(1)">
-                <input type="password" maxlength="1" id="k2" oninput="lanjut(2)">
-                <input type="password" maxlength="1" id="k3" oninput="lanjut(3)">
-                <input type="password" maxlength="1" id="k4" oninput="lanjut(4)">
-            </div>
-            <button onclick="cekKode()">KONFIRMASI</button>
-            <button class="batal" onclick="tutupLayar()">BATAL</button>
-            <div class="salah" id="pesanSalah">Kode salah</div>
-        </div>
-    </div>
+  <button id="unlock">BUKA KUNCI</button>
+  <p id="status">Mode simulasi aktif</p>
 
-    <script>
-        // === PENGATURAN ===
-        const KODE = '1234';
-        const LINK = 'https://www.google.com';
-        let hitungTekan = 0;
-        let timer = null;
+  <button id="exit">KELUAR DARI SIMULASI</button>
 
-        // Muat konten
-        document.getElementById('web').src = LINK;
+  <p class="note">
+    Simulasi visual saja. Tidak mengunci perangkat.
+  </p>
+  <div class="footer">by @bnzzz28</div>
+</main>
 
-        // Tekan 5x di pojok kanan atas untuk munculkan layar kode
-        function tekanKeluar() {
-            hitungTekan++;
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                hitungTekan = 0;
-            }, 1500);
-            
-            if (hitungTekan >= 5) {
-                hitungTekan = 0;
-                munculLayar();
-            }
-        }
+<script>
+let seconds = 120;
+let finished = false;
 
-        function munculLayar() {
-            document.getElementById('layarKode').style.display = 'flex';
-            document.getElementById('k1').focus();
-        }
+const timer = document.getElementById("timer");
+const statusText = document.getElementById("status");
+const pin = document.getElementById("pin");
 
-        function tutupLayar() {
-            document.getElementById('layarKode').style.display = 'none';
-            ['k1','k2','k3','k4'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('pesanSalah').style.display = 'none';
-        }
+function updateTimer() {
+  timer.textContent =
+    String(Math.floor(seconds / 60)).padStart(2, "0") + ":" +
+    String(seconds % 60).padStart(2, "0");
+}
 
-        function lanjut(n) {
-            if (n < 4 && document.getElementById('k'+n).value) {
-                document.getElementById('k'+(n+1)).focus();
-            }
-        }
+const countdown = setInterval(() => {
+  if (finished) return;
 
-        function cekKode() {
-            const kode = 
-                document.getElementById('k1').value +
-                document.getElementById('k2').value +
-                document.getElementById('k3').value +
-                document.getElementById('k4').value;
-            
-            if (kode === KODE) {
-                alert('✅ Kode benar — tutup aplikasi secara manual');
-                tutupLayar();
-            } else {
-                document.getElementById('pesanSalah').style.display = 'block';
-                ['k1','k2','k3','k4'].forEach(id => document.getElementById(id).value = '');
-                document.getElementById('k1').focus();
-            }
-        }
+  if (seconds > 0) seconds--;
+  updateTimer();
 
-        // Cegah tombol kembali di browser
-        history.pushState({}, '', location.href);
-        window.addEventListener('popstate', () => {
-            history.pushState({}, '', location.href);
-        });
-    </script>
+  if (seconds === 0) {
+    clearInterval(countdown);
+    statusText.textContent = "Waktu simulasi habis.";
+  }
+}, 1000);
+
+document.getElementById("unlock").onclick = () => {
+  if (finished) return;
+
+  if (pin.value === "7891234") {
+    finished = true;
+    clearInterval(countdown);
+    statusText.textContent = "PIN benar. Simulasi selesai.";
+  } else {
+    statusText.textContent = "PIN salah. Coba lagi.";
+    pin.value = "";
+  }
+};
+
+document.getElementById("exit").onclick = () => {
+  finished = true;
+  clearInterval(countdown);
+  document.getElementById("panel").innerHTML =
+    "<h1>SIMULASI SELESAI</h1>" +
+    "<p>Kamu telah keluar dari simulasi.</p>" +
+    '<div class="footer">by @bnzzz28</div>';
+};
+
+updateTimer();
+</script>
 </body>
 </html>
