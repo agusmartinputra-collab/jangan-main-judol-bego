@@ -3,135 +3,56 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#100000">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HP MU TELAH TERKUNCI</title>
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: #100000;
-  color: white;
-  font-family: Arial, sans-serif;
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;display:grid;place-items:center;
+  background:#100000;color:white;font-family:Arial,sans-serif
 }
-
-.panel {
-  width: 100%;
-  max-width: 380px;
-  padding: 25px 20px;
-  text-align: center;
-  background: #1b1111;
-  border: 2px solid #e00000;
-  border-radius: 15px;
-  box-shadow: 0 0 25px #650000;
+.panel{
+  width: min(88%,360px);padding:26px 22px;text-align:center;
+  background:#1b1111;border:2px solid #e00000;border-radius:16px;
+  box-shadow:0 0 24px #650000
 }
-
-h1 { color: #ff2929; font-size: 25px; }
-.timer { color: #ff3939; font-size: 38px; font-weight: bold; }
-
-input, button {
-  width: 100%;
-  padding: 13px;
-  margin-top: 12px;
-  border-radius: 8px;
-  font-size: 16px;
+h2{color:#ff2929;font-size:24px}
+input,button{
+  width:100%;padding:13px;margin-top:12px;border-radius:8px;
+  font-size:16px
 }
-
-input {
-  background: #292020;
-  color: white;
-  border: 1px solid #704040;
-}
-
-button {
-  background: #c90000;
-  color: white;
-  border: none;
-  font-weight: bold;
-}
-
-#status { color: #ffaaaa; font-size: 13px; }
-.footer { margin-top: 25px; color: #999; font-size: 12px; }
-.note { color: #bbb; font-size: 11px; }
+input{background:#292020;color:white;border:1px solid #704040}
+button{background:#c90000;color:white;border:0;font-weight:bold}
+#status{font-size:13px;color:#ffaaaa;min-height:18px}
+footer{margin-top:24px;color:#999;font-size:12px}
 </style>
 </head>
-
 <body>
 <main class="panel" id="panel">
-  <h1>HP MU TELAH TERKUNCI</h1>
-  <p>SIMULASI LAYAR PENGUNCI</p>
-
-  <div class="timer" id="timer">02:00</div>
-
-  <input id="pin" type="password"
-         inputmode="numeric" placeholder="Masukkan PIN">
-
+  <h2>HP MU TELAH TERKUNCI</h2>
+  <p>Masukkan kode untuk menutup panel ini.</p>
+  <input id="pin" type="password" inputmode="numeric"
+         placeholder="Masukkan PIN">
   <button id="unlock">BUKA KUNCI</button>
-  <p id="status">Mode simulasi aktif</p>
-
-  <button id="exit">KELUAR DARI SIMULASI</button>
-
-  <p class="note">
-    Simulasi visual saja. Tidak mengunci perangkat.
-  </p>
-  <div class="footer">by @bnzzz28</div>
+  <p id="status"></p>
+  <footer>by @bnzzz28</footer>
 </main>
-
 <script>
-let seconds = 120;
-let finished = false;
-
-const timer = document.getElementById("timer");
-const statusText = document.getElementById("status");
-const pin = document.getElementById("pin");
-
-function updateTimer() {
-  timer.textContent =
-    String(Math.floor(seconds / 60)).padStart(2, "0") + ":" +
-    String(seconds % 60).padStart(2, "0");
-}
-
-const countdown = setInterval(() => {
-  if (finished) return;
-
-  if (seconds > 0) seconds--;
-  updateTimer();
-
-  if (seconds === 0) {
-    clearInterval(countdown);
-    statusText.textContent = "Waktu simulasi habis.";
-  }
-}, 1000);
+const PIN = "7891234";
 
 document.getElementById("unlock").onclick = () => {
-  if (finished) return;
+  const input = document.getElementById("pin");
+  const status = document.getElementById("status");
 
-  if (pin.value === "7891234") {
-    finished = true;
-    clearInterval(countdown);
-    statusText.textContent = "PIN benar. Simulasi selesai.";
+  if (input.value === PIN) {
+    document.getElementById("panel").remove();
+    document.body.innerHTML =
+      "<h2 style='color:white'>Panel ditutup.</h2>";
   } else {
-    statusText.textContent = "PIN salah. Coba lagi.";
-    pin.value = "";
+    status.textContent = "Kode salah. Coba lagi.";
+    input.value = "";
   }
 };
-
-document.getElementById("exit").onclick = () => {
-  finished = true;
-  clearInterval(countdown);
-  document.getElementById("panel").innerHTML =
-    "<h1>SIMULASI SELESAI</h1>" +
-    "<p>Kamu telah keluar dari simulasi.</p>" +
-    '<div class="footer">by @bnzzz28</div>';
-};
-
-updateTimer();
 </script>
 </body>
 </html>
